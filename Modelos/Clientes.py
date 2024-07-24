@@ -70,11 +70,3 @@ class Cliente():
                                 
             return nova_conta     
 """
-
-cliente3 = Cliente.criar_conta('Ana', '1223.456', '771234-5')
-cliente3.ativar_conta()
-
-Cliente.listar_clientes()
-
-
-
