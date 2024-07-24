@@ -1,9 +1,8 @@
-from random import *
 
 class Cliente():
     lista_de_clientes = []
 
-# PROPRIEDADES DA CONTA:
+# PROPRIEDADES DO CLIENTE:
 
     def __init__(self, nome, cpf, conta):
         self._nome = nome
@@ -39,7 +38,7 @@ class Cliente():
 
 
 
-# INTERAÇÃO COM A CONTA:
+# INTERAÇÃO COM O CLIENTE:
 
     @classmethod
     def listar_clientes(cls):
@@ -51,22 +50,9 @@ class Cliente():
         self._ativo = not self._ativo
 
     @classmethod
-    def criar_conta(cls, nome, cpf, conta, ativo = False):
+    def criar_cliente(cls, nome, cpf, conta, ativo = False):
         nova_conta = Cliente(nome, cpf, conta)
         return nova_conta
 
-        """
-        nova_conta = Cliente(nome, cpf, conta)
-            nome = input(str('Qual o nome do cliente: '))
-            cpf = input(str('Qual o CPF do cliente (com pontos): '))
-            conta = numeros_conta
-            numeros_conta = []
-            
-            while len(numeros_conta) != 5:
-                numeros_conta.append(randrange(0,9))
 
-            for i in numeros_conta:
-                print(i, end='')
-                                
-            return nova_conta     
-"""
+
