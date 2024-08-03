@@ -81,6 +81,15 @@ class Conta():
 
 
     
+"""
+conta1 = Conta(1000)
+conta2 = Conta(500)
 
+conta1.deposito_conta(1500)
+conta1.saque_conta(500)
 
+conta1.ver_saldo()
+conta2.ver_saldo()
 
+Conta.listar_contas()
+"""
