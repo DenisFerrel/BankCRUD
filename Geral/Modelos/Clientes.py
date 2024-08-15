@@ -1,7 +1,11 @@
 from Contas import Conta
+import mysql.connector
+
 
 class Cliente():
     lista_de_clientes = []
+    
+
 
 # PROPRIEDADES DO CLIENTE:
 
@@ -11,6 +15,32 @@ class Cliente():
         self._conta = Conta(saldo_inicial)
         self._ativo = False
         Cliente.lista_de_clientes.append(self)
+        
+        #CONEXÃO COM BANCO DE DADOS:
+
+        conexao = mysql.connector.connect(
+        host='localhost',
+        user='root',
+        password='Denis@@7982mysql',
+        database='banco_denis'
+    )
+
+        cursor = conexao.cursor()
+
+        # Obtendo o número da conta (supondo que você tenha um método para isso)
+        numero_conta = self._conta._conta  # ou use um método apropriado se existir
+
+        # CRUD da conta na database:
+        comando = (
+            f'INSERT INTO banco_contas (nome_cliente, cpf_cliente, numero_conta, saldo_conta, status_conta) '
+            f'VALUES ("{self._nome}", "{self._cpf}", {numero_conta}, {0}, {int(self._ativo)})'
+        )
+        cursor.execute(comando)
+        conexao.commit()  # Edita o BD
+
+        # Fechar a conexão
+        cursor.close()
+        conexao.close()
 
     def __str__(self):
         return f'{self.nome} | {self.cpf} | {self.conta}' 
@@ -58,11 +88,3 @@ class Cliente():
 
     def ativar_cliente(self):
         self._ativo = not self._ativo
-
-"""
-cliente1 = Cliente('Livia', '37028525813', 1500)
-cliente2 = Cliente('Denis', '41756168881', 2300)
-cliente2.ativar_cliente()
-
-Cliente.listar_clientes()
-"""

@@ -23,16 +23,6 @@ class Conta():
     def saldo(self):
         return self._saldo
     
-    #Lista as contas existentes:
-    @classmethod
-    def listar_contas(cls):
-        if cls.numeros_conta:
-            for conta in cls.numeros_conta:
-                print(f'Conta {conta._conta}, Saldo: {conta._saldo}')
-        else:
-            print('Nenhuma conta criada ainda.')
-
-
     # Cria um numero de conta aleatório para um novo cliente
     @staticmethod
     def criar_conta():
