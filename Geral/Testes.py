@@ -6,12 +6,12 @@ from Modelos.Clientes import Cliente
 from Modelos.Contas import Conta
 
 
-cliente1 = Cliente('Carlinhos', '37028525813')
-cliente2 = Cliente('Pedrinho', '41756168881')
-cliente3 = Cliente('João', '37028624313')
+cliente4 = Cliente('Marcos', '123456789')
+cliente5 = Cliente('Breno', '987654321')
+cliente6 = Cliente('Sandro', '123789456')
 
-cliente1.ativar_cliente()
-cliente3.ativar_cliente()
+cliente4.ativar_cliente()
+cliente6.ativar_cliente()
 
 
 # Cliente.listar_clientes()
@@ -33,7 +33,7 @@ saldo:
 
     - Criar a conexão e salvar no DB: ok
     - Criar método que verifica se existe um cliente cadastrado já e nega novo
-      cadastro: 
+      cadastro: ok
     - Criar método que ve se o número da conta já existe e cria outro: ok
     - Criar método que atualiza o status da conta no próprio DB:
     - Criar métodos que atualizam saldos e interações no próprio DB:

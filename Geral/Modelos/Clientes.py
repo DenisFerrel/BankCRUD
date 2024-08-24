@@ -27,7 +27,7 @@ class Cliente():
         )
         cursor.execute(comando_verificacao)
         resultado = cursor.fetchone()
-        
+
         # Se não houver um registro correspondente, insira os novos dados
         if resultado[0] == 0:
             comando = (
@@ -62,13 +62,6 @@ class Cliente():
         cursor.close()
         conexao.close()
         
-    """
-    @classmethod
-    def criar_cliente(cls, nome, cpf, conta, ativo = False):
-        nova_conta = Cliente(nome, cpf, conta)
-        return nova_conta
-    """
-
     # Getter
 
     @property
@@ -95,4 +88,15 @@ class Cliente():
 # INTERAÇÃO COM O CLIENTE:
 
     def ativar_cliente(self):
-        self._ativo = not self._ativo
+
+        #Faz a conexão
+        conexao = Conexao_DB()
+        cursor = conexao.cursor()
+        
+        ativar_cliente= f'UPDATE banco_contas SET status_conta = 1 WHERE nome_cliente = "{self._nome}"'
+        cursor.execute(ativar_cliente)
+        conexao.commit() #Edita banco de dados
+
+        # Fechar a conexão
+        cursor.close()
+        conexao.close()
