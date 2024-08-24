@@ -1,5 +1,22 @@
 
 from random import randrange
+import mysql.connector
+from mysql.connector import Error
+
+def Conexao_DB():
+    #CONEXÃO COM BANCO DE DADOS:
+    try:
+            conexao = mysql.connector.connect(
+                host='localhost',
+                user='root',
+                password='Denis@@7982mysql',
+                database='banco_denis'
+            )
+            if conexao.is_connected():
+                return conexao
+    except Error as e:
+            print(f"Erro ao conectar ao banco de dados: {e}")
+            return None
 
 class Conta():
     numeros_conta = []
@@ -26,12 +43,30 @@ class Conta():
     # Cria um numero de conta aleatório para um novo cliente
     @staticmethod
     def criar_conta():
-        numeros_conta = []
-        while len(numeros_conta) != 5:
-            numeros_conta.append(randrange(0,9))
-        return int(''.join(map(str, numeros_conta)))
+        while True:
+            # Geração de um número de conta aleatório
+            numeros_conta = [str(randrange(0, 10)) for _ in range(5)]
+            numero_conta = int(''.join(numeros_conta))
             
-          
+            
+            #Faz a conexão
+            conexao = Conexao_DB()
+            cursor = conexao.cursor()
+            
+            # Verificar se o número da conta já existe no banco de dados
+            comando = f"SELECT COUNT(*) FROM banco_contas WHERE numero_conta = {numero_conta}"
+            cursor.execute(comando)
+            resultado = cursor.fetchone()
+
+            # Se o número da conta não existir, sair do loop e retornar o número
+            if resultado[0] == 0:
+                cursor.close()
+                conexao.close()
+                return numero_conta
+
+            # Fecha a conexão antes de tentar novamente
+            cursor.close()
+            conexao.close()
 
 # INTERAÇÃO COM A CONTA:
 

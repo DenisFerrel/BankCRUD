@@ -1,11 +1,8 @@
 from Contas import Conta
-import mysql.connector
+from Contas import Conexao_DB
 
 
 class Cliente():
-    lista_de_clientes = []
-    
-
 
 # PROPRIEDADES DO CLIENTE:
 
@@ -14,29 +11,34 @@ class Cliente():
         self._cpf = cpf
         self._conta = Conta(saldo_inicial)
         self._ativo = False
-        Cliente.lista_de_clientes.append(self)
         
-        #CONEXÃO COM BANCO DE DADOS:
-
-        conexao = mysql.connector.connect(
-        host='localhost',
-        user='root',
-        password='Denis@@7982mysql',
-        database='banco_denis'
-    )
-
+        #Faz a conexão
+        conexao = Conexao_DB()
         cursor = conexao.cursor()
-
-        # Obtendo o número da conta (supondo que você tenha um método para isso)
-        numero_conta = self._conta._conta  # ou use um método apropriado se existir
+        
+        # Obtendo o número da conta
+        numero_conta = self._conta._conta  
 
         # CRUD da conta na database:
-        comando = (
-            f'INSERT INTO banco_contas (nome_cliente, cpf_cliente, numero_conta, saldo_conta, status_conta) '
-            f'VALUES ("{self._nome}", "{self._cpf}", {numero_conta}, {0}, {int(self._ativo)})'
+        
+        comando_verificacao = (
+            f'SELECT COUNT(*) FROM banco_contas WHERE nome_cliente = "{self._nome}" '
+            f'AND cpf_cliente = "{self._cpf}"'
         )
-        cursor.execute(comando)
-        conexao.commit()  # Edita o BD
+        cursor.execute(comando_verificacao)
+        resultado = cursor.fetchone()
+        
+        # Se não houver um registro correspondente, insira os novos dados
+        if resultado[0] == 0:
+            comando = (
+                f'INSERT INTO banco_contas (nome_cliente, cpf_cliente, numero_conta, saldo_conta, status_conta) '
+                f'VALUES ("{self._nome}", "{self._cpf}", {numero_conta}, {0}, {int(self._ativo)})'
+                )
+            cursor.execute(comando)
+            conexao.commit()  # Edita o BD
+            print("Conta criada com sucesso!")
+        else:
+            print("Erro: Já existe uma conta com este nome e CPF.")
 
         # Fechar a conexão
         cursor.close()
@@ -47,19 +49,25 @@ class Cliente():
 
     @classmethod
     def listar_clientes(cls):
-        if cls.lista_de_clientes:
-            print("Lista de clientes:")
-            for cliente in cls.lista_de_clientes:
-                print(f"Nome: {cliente._nome}, CPF: {cliente._cpf}, Conta: {cliente._conta._conta}, Ativo: {cliente._ativo}")
-        else:
-            print("Nenhum cliente foi criado ainda.")
+        
+        conexao = Conexao_DB()
+        cursor = conexao.cursor()
+        
+        comando_listar= (f'SELECT * FROM banco_contas')
+        cursor.execute(comando_listar)
+        resultado = cursor.fetchall() #Le o banco de dados
+        print(resultado)
 
-
+        # Fechar a conexão
+        cursor.close()
+        conexao.close()
+        
+    """
     @classmethod
     def criar_cliente(cls, nome, cpf, conta, ativo = False):
         nova_conta = Cliente(nome, cpf, conta)
         return nova_conta
-
+    """
 
     # Getter
 
